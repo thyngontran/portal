@@ -1,0 +1,45 @@
+
+
+<hr>
+
+<input [(ngModel)]="trackTeamWon" placeholder="Team Won" required> vs
+<input [(ngModel)]="trackTeamLost" placeholder="Team Lost" required>
+<input [(ngModel)]="trackPointDif" placeholder="Dif" required>
+<button (click)="trackScore()">RECORD<img src="assets/img/icons/volleyball1.svg"></button>
+<hr>
+<div class="container red">
+Randomized team(s):
+</div>
+<hr>
+{{generatedPool1.length}} player(s) in {{pools[0]}} Pool
+<table class="table table-hover table-striped">
+    <tr><th>Team</th><th>Player Name</th><th>Net</th></tr>
+    <tr *ngFor="let player of generatedPool1">
+        <td>{{player.team}}</td>
+        <td>{{player.name}}</td>
+        <td>{{player.net}}</td>
+    </tr>
+</table>
+
+<br>
+{{generatedPool2.length}} player(s) in {{pools[1]}} Pool
+<table class="table table-hover table-striped">
+    <tr><th>Team</th><th>Player Name</th><th>Net</th></tr>
+    <tr *ngFor="let player of generatedPool2">
+        <td>{{player.team}}</td>
+        <td>{{player.name}}</td>
+        <td>{{player.net}}</td>
+    </tr>
+
+</table>
+<br>
+{{generatedPool3.length}} player(s) in {{pools[2]}} Pool
+<table class="table table-hover table-striped">
+    <tr><th>Team</th><th>Player Name</th><th>Net</th></tr>
+    <tr *ngFor="let player of generatedPool3">
+        <td>{{player.team}}</td>
+        <td>{{player.name}}</td>
+        <td>{{player.net}}</td>
+    </tr>
+
+</table>

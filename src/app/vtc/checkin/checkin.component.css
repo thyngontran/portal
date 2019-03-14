@@ -1,0 +1,20 @@
+
+<style>
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table, th, td {
+    height: 100%;
+    border: 1px solid white;
+    padding: 3px;
+}
+
+table tr:nth-child(odd){
+    background-color: azure;
+}
+
+table tr:nth-child(even){
+    background-color: aqua;
+}

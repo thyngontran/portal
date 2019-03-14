@@ -1,0 +1,44 @@
+<div>
+Have games teach the games.  The best way to learn volleyball skills is playing 2vs2 or 3vs3.  Randomized matches are computerized each time.  Rank is based on #game played, #game won, total points by using a method of the mathematician Bjerring; and more detailed whitepaper can be found <a href="/resource/LinearRankingTournament.pdf">here</a>.<br>
+<small><b><i>**GP-Game Played, GW-Game Won, GL-Game Lost, Points-Total Points</i></b></small>
+</div>
+
+<hr>
+<table class="table table-hover table-striped">
+    <tr><th>Rank</th><th>Player Name</th><th>GP</th><th>GW</th><th>GL</th><th>Points</th></tr>
+    <tr *ngFor="let player of group1;index as i" >
+        <td>{{i+1}}</td>
+        <td>{{player.name}}</td>
+        <td>{{player.gamePlayed}}</td>
+        <td>{{player.gameWon}}</td>
+        <td>{{player.gameLost}}</td>
+        <td>{{player.totalPoints}}</td>
+    </tr>
+</table>
+
+<br>
+<table class="table table-hover table-striped">
+  <tr><th>Rank</th><th>Player Name</th><th>GP</th><th>GW</th><th>GL</th><th>Points</th></tr>
+    <tr *ngFor="let player of group2;index as i">
+      <td>{{i+1}}</td>
+      <td>{{player.name}}</td>
+      <td>{{player.gamePlayed}}</td>
+      <td>{{player.gameWon}}</td>
+      <td>{{player.gameLost}}</td>
+      <td>{{player.totalPoints}}</td>
+    </tr>
+
+</table>
+<br>
+<table class="table table-hover table-striped">
+  <tr><th>Rank</th><th>Player Name</th><th>GP</th><th>GW</th><th>GL</th><th>Points</th></tr>
+    <tr *ngFor="let player of group3;index as i">
+      <td>{{i+1}}</td>
+      <td>{{player.name}}</td>
+      <td>{{player.gamePlayed}}</td>
+      <td>{{player.gameWon}}</td>
+      <td>{{player.gameLost}}</td>
+      <td>{{player.totalPoints}}</td>
+    </tr>
+
+</table>
