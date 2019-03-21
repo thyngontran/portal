@@ -1,14 +1,23 @@
-# Vbcportal
-
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.1.
+# portal (for a volleyball club)
+This project is being refractored to use utilize AngularJS as front end (tier 1), Node Express as backend to expose RESTFUL API (tier 2), and DynamoDB as noSQL datastore. 
 
 ## Development server
+Versions
+*Node 9.2.1
+*Express 4.15.5
+*DynamoDBLocal - Latest
+*JRE - Latest
+*AngularJS 6
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Tier 1) Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+Tier 2) Run `npm start` to bring node express up.  Navigate to `http://localhost:3000/`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Tier 3) Run Local DynamoDB:
+
+
+## Prebuild - create tabeles and populate dataset
+
 
 ## Build
 
@@ -23,5 +32,3 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
