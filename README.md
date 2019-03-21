@@ -1,7 +1,7 @@
-# portal (for a volleyball club)
+# Portal (for a volleyball club)
 This project is being refractored to use utilize AngularJS as front end (tier 1), Node Express as backend to expose RESTFUL API (tier 2), and DynamoDB as noSQL datastore. 
 
-## Development server
+## Development server(s)
 Versions
 *Node 9.2.1
 *Express 4.15.5
@@ -17,6 +17,7 @@ Tier 3) Run Local DynamoDB:
 
 
 ## Prebuild - create tabeles and populate dataset
+More instruction TBD
 
 
 ## Build
@@ -32,3 +33,4 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ## Further help
+TBD
