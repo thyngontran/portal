@@ -1,13 +1,21 @@
 # Portal (for a volleyball club)
 This project is being refractored to use utilize AngularJS as front end (tier 1), Node Express as backend to expose RESTFUL API (tier 2), and DynamoDB as noSQL datastore. 
 
+## Targeted production env using AWS stack(s)
+backend:
+*DynamoDB
+*Lambda fucntions (using Node.js 8.10)
+frontend:
+*AngularJS 6
+
 ## Development server(s)
 Versions
-*Node 9.2.1
-*Express 4.15.5
+###DynamoDB
 *DynamoDBLocal - Latest
 *JRE - Latest
-*AngularJS 6
+###Lambda Local - npm
+
+###Frontend - AngularJS6
 
 Tier 1) Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
