@@ -9,19 +9,16 @@ frontend:
 *AngularJS 6
 
 ## Development server(s)
-Versions
-###DynamoDB
-*DynamoDBLocal - Latest
-*JRE - Latest
-###Lambda Local - npm
+DynamoDB Local:
+https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html
 
-###Frontend - AngularJS6
+Lambda Local - npm
+https://www.npmjs.com/package/lambda-local
 
+Frontend - AngularJS6
 Tier 1) Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-Tier 2) Run `npm start` to bring node express up.  Navigate to `http://localhost:3000/`
 
-Tier 3) Run Local DynamoDB:
 
 
 ## Prebuild - create tabeles and populate dataset
