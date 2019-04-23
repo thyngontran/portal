@@ -6,7 +6,7 @@ backend:
 *DynamoDB
 *Lambda fucntions (using Node.js 8.10)
 frontend:
-*AngularJS 6
+*Angular 6
 
 ## Development server(s)
 DynamoDB Local:
@@ -15,7 +15,7 @@ https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.D
 Lambda Local - npm
 https://www.npmjs.com/package/lambda-local
 
-Frontend - AngularJS6
+Frontend - Angular 6
 Tier 1) Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 
