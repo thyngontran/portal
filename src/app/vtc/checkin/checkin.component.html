@@ -6,43 +6,51 @@
   <button (click)="letsGo()">LETS GO<img src="assets/img/icons/volleyball1.svg"></button>
 </label>
 
-          <br>
+<br>
 
-            <!-- input [(ngModel)]="newPlayerId" placeholder="Player ID" -->
-            <input [(ngModel)]="newPlayerName" placeholder="Enter New Player" required>
+<!-- input [(ngModel)]="newPlayerId" placeholder="Player ID" -->
+<input [(ngModel)]="newPlayerName" placeholder="Enter New Player" required>
 
-          <label>Pool:
-            <select class="form-control"  id="group" required
-              [(ngModel)]="newGroup" name="newGroup">
-              <option *ngFor="let group of groups" [value]="group">{{group}}</option>
-            </select>
-          </label>
-          <label>Checkin:
-            <input type="checkbox" [(ngModel)]="newCheckin" placeholder="Checkin">
-          </label>
-          <button (click)="addPlayer()">Add</button>
+<label>Pool:
+  <select class="form-control" id="group" required [(ngModel)]="newGroup" name="newGroup">
+    <option *ngFor="let group of groups" [value]="group">{{group}}</option>
+  </select>
+</label>
+<label>Checkin:
+  <input type="checkbox" [(ngModel)]="newCheckin" placeholder="Checkin">
+</label>
+<button class="btn btn-primary btn-sm" (click)="addPlayer()">Add</button>
 
-        <table>
-        <tr><th>#</th><th><input [(ngModel)]="searchKeyword" placeholder="Search Word" size="10"></th><th width="30%">Player Name</th><th (click)="checkInAll()">Checkin</th><th>Pool</th><th>GP</th><th>GW</th><th>GL</th><th>Points</th></tr>
-        <tr *ngFor="let player of players | filter : searchKeyword; index as i">
-            <td>{{i+1}}</td>
-            <td align=center><button (click)="savePlayer(player)">Save</button></td>
-            <td>{{player.name}}</td>
-            <td align=center><input type="checkbox" [(ngModel)]="player.checkin" placeholder="Checkin"></td>
-            <td>
-              <select required maxlength="10"
-                [(ngModel)]="player.group" name="pool">
-                <option *ngFor="let group of groups" [value]="group">{{group}}</option>
-              </select>
-            </td>
-            <td align=center>{{player.gamePlayed}}</td>
-            <td align=center>{{player.gameWon}}</td>
-            <td align=center>{{player.gameLost}}</td>
-            <td align=center>{{player.totalPoints}}</td>
-        </tr>
+<table class="table table-striped">
+  <tr>
+    <th>#</th>
+    <th><input [(ngModel)]="searchKeyword" placeholder="Search Word" size="10"></th>
+    <th width="30%">Player Name</th>
+    <th (click)="checkInAll()">Checkin</th>
+    <th>Pool</th>
+    <th>GP</th>
+    <th>GW</th>
+    <th>GL</th>
+    <th>Points</th>
+  </tr>
+  <tr *ngFor="let player of players | filter : searchKeyword; index as i">
+    <td>{{i+1}}</td>
+    <td align=center><button (click)="savePlayer(player)">Save</button></td>
+    <td>{{player.name}}</td>
+    <td align=center><input type="checkbox" [(ngModel)]="player.checkin" placeholder="Checkin"></td>
+    <td>
+      <select required maxlength="10" [(ngModel)]="player.group" name="pool">
+        <option *ngFor="let group of groups" [value]="group">{{group}}</option>
+      </select>
+    </td>
+    <td align=center>{{player.gamePlayed}}</td>
+    <td align=center>{{player.gameWon}}</td>
+    <td align=center>{{player.gameLost}}</td>
+    <td align=center>{{player.totalPoints}}</td>
+  </tr>
 
-      </table>
+</table>
 
-    <!--{{totalCheckin()}} out of {{players.length}} -->
-    <br>
-    <hr>
+<!--{{totalCheckin()}} out of {{players.length}} -->
+<br>
+<hr>
