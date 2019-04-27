@@ -1,27 +1,29 @@
-<select required maxlength="10" [(ngModel)]="selectedSite" name="site" (ngModelChange)="onSelectSite()" class="form-control">
+<div class="form-inline">
+<select required maxlength="10" [(ngModel)]="selectedSite" name="site" (ngModelChange)="onSelectSite()"
+  class="form-control">
   <option *ngFor="let site of sites" [value]="site">{{site}}</option>
-</select>
-
-<label>
-  <button class="btn btn-primary btn-sm" (click)="letsGo()">LETS GO<img src="assets/img/icons/volleyball1.svg"></button>
-</label>
-
+</select> 
+  <button class="btn btn-primary btn-sm" (click)="letsGo()">LETS GO</button>
+</div>
 <br>
 
 <!-- input [(ngModel)]="newPlayerId" placeholder="Player ID" -->
-<input [(ngModel)]="newPlayerName" placeholder="Enter New Player"  class="form-control" required>
+<div class="form-inline">
+ 
+<input [(ngModel)]="newPlayerName" placeholder="Enter New Player" class="form-control" required>
 <div class="form-group">
-<label>Pool:
-  <select class="form-control" id="group" required [(ngModel)]="newGroup" name="newGroup">
-    <option *ngFor="let group of groups" [value]="group">{{group}}</option>
-  </select>
-</label> 
-<label class="checkbox-inline">
-  <input type="checkbox" [(ngModel)]="newCheckin" placeholder="Checkin">Checkin
-</label>
-<button class="btn btn-primary btn-sm" (click)="addPlayer()">Add</button>
+      <label for="group">Pool:</label>
+      <select class="form-control" id="group" required [(ngModel)]="newGroup" name="newGroup">
+        <option *ngFor="let group of groups" [value]="group">{{group}}</option>
+      </select>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox" [(ngModel)]="newCheckin" placeholder="Checkin">Checkin
+    </label>
+    <button class="btn btn-primary btn-sm" (click)="addPlayer()">Add</button>
+  </div>
 </div>
-
+</div>
 <table class="table table-striped">
   <tr>
     <th>#</th>
@@ -36,18 +38,19 @@
   </tr>
   <tr *ngFor="let player of players | filter : searchKeyword; index as i">
     <td>{{i+1}}</td>
-    <td align=center><button (click)="savePlayer(player)" class="btn btn-primary btn-sm">Save</button></td>
+    <td><button (click)="savePlayer(player)" class="btn btn-primary btn-sm">Save</button></td>
     <td>{{player.name}}</td>
-    <td align=center><input type="checkbox" [(ngModel)]="player.checkin" placeholder="Checkin" class="form-control"></td>
+    <td><input type="checkbox" [(ngModel)]="player.checkin" placeholder="Checkin">
+    </td>
     <td>
-      <select required maxlength="10" [(ngModel)]="player.group" name="pool">
+      <select class="form-control" required maxlength="10" [(ngModel)]="player.group" name="pool">
         <option *ngFor="let group of groups" [value]="group">{{group}}</option>
       </select>
     </td>
-    <td align=center>{{player.gamePlayed}}</td>
-    <td align=center>{{player.gameWon}}</td>
-    <td align=center>{{player.gameLost}}</td>
-    <td align=center>{{player.totalPoints}}</td>
+    <td>{{player.gamePlayed}}</td>
+    <td>{{player.gameWon}}</td>
+    <td>{{player.gameLost}}</td>
+    <td>{{player.totalPoints}}</td>
   </tr>
 
 </table>
