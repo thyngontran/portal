@@ -15,7 +15,12 @@ declare var AWSCognito: any;
 @Injectable({ providedIn: 'root' })
 export class VtcService {
 
-  createdBy = "guest@cyburi.com";
+  createdBy = "thyngontran@gmail.com";  //TODO remove
+  serverUrl = "https://8a5qna5p87.execute-api.us-east-1.amazonaws.com/latest";  //aws hosted in lambda
+  //serverUrl = "http://localhost:3333";  //local run in node express
+
+
+
   locationId;
 
   generatedPool1;
@@ -95,58 +100,18 @@ export class VtcService {
     }
 
 
-    getAllPlayers(locationId):Player[]{
-        //need to handle credital that expired
-        console.log("DynamoDBService: reading from DDB with creds - " + AWS.config.credentials);
-        var params = {
-            TableName: environment.vbcTableName,
-            IndexName: "createdByIndex",
-            KeyConditionExpression: "createdBy = :createdBy",
-            FilterExpression: "locationId = :locationId",
-            ExpressionAttributeValues: {
-                ":createdBy": this.createdBy,
-                ":locationId": locationId
-            }
-        };
-        var result = [];
-        var docClient = new AWS.DynamoDB.DocumentClient();
-        docClient.query(params, onQuery);
+    getAllPlayers(locationId,accessToken:string) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
+          'Authorization': accessToken
+        })
+      };
 
-        function onQuery(err, data) {
-            if (err) { //todo handle login expired
+      console.log("Event id:" + locationId);
+      return this.http.get(this.serverUrl+"/player/allByEvent/"+locationId, httpOptions);
 
-              console.error("DynamoDBService: Unable to query the table. Error JSON:", JSON.stringify(err, null, 2));
-              //CredentialsError; 400
-              if (err.statusCode == 400) {
-                 //route to login
-                 this.router.navigate(['/home/login']);
-              }
-
-            } else {
-                // all the players
-                console.log("DynamoDBService: Query succeeded.");
-
-
-                data.Items.forEach(function(item) {
-
-                  console.log("DynamoDBService: item" + JSON.stringify(item));
-                  let aPlayer = new Player(item.PlayerId,item.name, eval(item.checkin),item.group,
-                      item.team, item.net, item.gameWon,item.gameLost, item.gamePlayed,
-                      item.totalPoints,item.createdBy, item.locationId
-                    );
-
-                  console.log("DynamoDBService: Player" + JSON.stringify(aPlayer));
-                  result.push(aPlayer);
-
-                  result.sort((p1,p2) => {
-                      return VtcService.naturalCompare(p1.name, p2.name);
-                  });
-
-                });
-            }
-        }
-
-        return result;
     }
 
     //Get Players that already checkin an by game.
@@ -182,8 +147,7 @@ export class VtcService {
                   console.log("DynamoDBService: item" + JSON.stringify(item));
                   if (item.checkin == "true") {
                     let aPlayer = new Player(item.PlayerId,item.name, eval(item.checkin),item.group,
-                        item.team, item.net, item.gameWon,item.gameLost, item.gamePlayed,
-                        item.totalPoints,item.createdBy, item.locationId
+                        item.createdBy, item.locationId  //TODO - should be eventName
                       );
 
                     console.log("DynamoDBService: add Player" + JSON.stringify(aPlayer));
@@ -250,8 +214,7 @@ export class VtcService {
 
                   console.log("DynamoDBService: item" + JSON.stringify(item));
                   let aPlayer = new Player(item.PlayerId,item.name, eval(item.checkin),item.group,
-                      item.team, item.net, item.gameWon,item.gameLost, item.gamePlayed,
-                      item.totalPoints,item.createdBy, item.locationId
+                      item.createdBy, item.locationId
                     );
 
                   console.log("DynamoDBService: Player" + JSON.stringify(aPlayer));
@@ -289,15 +252,31 @@ export class VtcService {
         try {
             let date = new Date().toString();
             console.log("DynamoDBService: Writing log entry. Type:" + player + " ID: " + AWS.config.credentials.params.IdentityId + " Date: " + date);
-            this.write(player);
+            //this.write(player,"DUMMY_ACCESS_TOKEN");  TODO not sure if anyone use this method.
         } catch (exc) {
             console.log("DynamoDBService: Couldn't write to DDB");
         }
 
     }
 
-    write(player: Player): void {
-        console.log("DynamoDBService: writing " + player + " entry");
+
+    /** /
+     *Use post to the CRUD player restful service
+     */
+    write(player: Player, accessToken:string) {
+
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
+          'Authorization': accessToken
+        })
+      };
+        console.log("Writing to restful server: player -" + JSON.stringify(player));
+        
+        return this.http.post(this.serverUrl+"/player", player, httpOptions);
+
+        /*
         var DDB = new AWS.DynamoDB({
             params: {TableName: environment.vbcTableName}
         });
@@ -310,14 +289,8 @@ export class VtcService {
                     name: {S: player.name},
                     group: {S: player.group},
                     checkin: {S: player.checkin.toString()},
-                    team: {S: player.team.toString()},
-                    gamePlayed: {S: player.gamePlayed.toString()},
-                    gameWon: {S: player.gameWon.toString()},
-                    gameLost: {S: player.gameLost.toString()},
-                    totalPoints: {S: player.totalPoints.toString()},
                     createdBy: {S: player.createdBy},
-                    locationId: {S: player.locationId},
-                    net: {S: player.net.toString()}
+                    locationId: {S: player.eventName},
                 }
             };
 
@@ -327,6 +300,7 @@ export class VtcService {
           if (result != null)
             console.log("DynamoDBService ERROR: wrote entry: " + JSON.stringify(result));
         });
+        */
     }
 
     saveAndGenerate(players: Player[]): string {

@@ -21,6 +21,8 @@ export const environment = {
 
     vbcTableName: 'CyburiPlayers',
 
+    playerUrl: 'http://localhost:3333/player'
+
 };
 
 /*
