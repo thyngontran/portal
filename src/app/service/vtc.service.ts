@@ -16,8 +16,8 @@ declare var AWSCognito: any;
 export class VtcService {
 
   createdBy = "thyngontran@gmail.com";  //TODO remove
-  serverUrl = "https://8a5qna5p87.execute-api.us-east-1.amazonaws.com/latest";  //aws hosted in lambda
-  //serverUrl = "http://localhost:3333";  //local run in node express
+  //serverUrl = "https://8a5qna5p87.execute-api.us-east-1.amazonaws.com/latest";  //aws hosted in lambda
+  serverUrl = "http://localhost:3333";  //local run in node express
 
 
 
