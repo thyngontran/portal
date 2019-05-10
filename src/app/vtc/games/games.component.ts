@@ -49,7 +49,7 @@ export class GamesComponent implements OnInit {
         player.gamePlayed++;
 
         //write to database
-        this.vtcService.write(player);
+        this.vtcService.write(player, "DUMMY_ACCESS_TOKEN"); //TODO
 
       }
 
@@ -62,7 +62,7 @@ export class GamesComponent implements OnInit {
         player.gamePlayed++;
 
         //write to database
-        this.vtcService.write(player);
+        this.vtcService.write(player, "DUMMY_ACCESS_TOKEN"); //TODO
 
       }
     }
