@@ -8,7 +8,11 @@
 <button (click)="trackScore()">RECORD<img src="assets/img/icons/volleyball1.svg"></button>
 <hr>
 <div class="container red">
-Randomized team(s):
+  <select required maxlength="10" [(ngModel)]="selectedSite" name="site" (ngModelChange)="onSelectSite()"
+    class="form-control">
+    <option *ngFor="let site of sites" [value]="site">{{site}}</option>
+  </select> 
+    Randomized team(s):
 </div>
 <hr>
 {{generatedPool1.length}} player(s) in {{pools[0]}} Pool

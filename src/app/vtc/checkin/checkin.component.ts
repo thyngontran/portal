@@ -62,8 +62,6 @@ export class CheckinComponent implements OnInit, OnDestroy, LoggedInCallback, Ca
       this.cognitoUtil.getIdToken(new IdTokenCallback(this));
       this.userParams.getParameters(this);//populate email; TODO-remove this field and rely on access token's attributes
     }
-
-
   }
 
 
@@ -112,8 +110,8 @@ export class CheckinComponent implements OnInit, OnDestroy, LoggedInCallback, Ca
     console.log("TTTT Save"+ player);
     this.vtcService.write(player, this.accessToken)
     .subscribe (       
-      success => alert("Saved Successful!"),
-      error => alert(error)
+      success => console.log("Added Successful!"),
+      error => {alert(JSON.stringify(error));}
     );
 
   }
@@ -128,7 +126,7 @@ export class CheckinComponent implements OnInit, OnDestroy, LoggedInCallback, Ca
 
       result.forEach(function(item) {
         console.log("RestFul: item" + JSON.stringify(item));
-        let aPlayer = new Player(item.PlayerId,item.name, eval(item.checkin),item.group,
+        let aPlayer = new Player(item.PlayerId,item.name, eval(item.checkin),item.groupName,
             item.createdBy, item.eventName
         );
 
@@ -166,8 +164,8 @@ export class CheckinComponent implements OnInit, OnDestroy, LoggedInCallback, Ca
 
     this.vtcService.write(newPlayer, this.accessToken)
     .subscribe (       
-      success => alert("Added Successful!"),
-      error => alert(error)
+      success => console.log("Added Successful!"),
+      error => {alert(JSON.stringify(error));}
     );
   }
 

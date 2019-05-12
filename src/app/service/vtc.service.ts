@@ -16,8 +16,8 @@ declare var AWSCognito: any;
 export class VtcService {
 
   createdBy = "thyngontran@gmail.com";  //TODO remove
-  //serverUrl = "https://8a5qna5p87.execute-api.us-east-1.amazonaws.com/latest";  //aws hosted in lambda
-  serverUrl = "http://localhost:3333";  //local run in node express
+  serverUrl = "https://8a5qna5p87.execute-api.us-east-1.amazonaws.com/latest";  //aws hosted in lambda
+  //serverUrl = "http://localhost:3333";  //local run in node express
 
 
 
@@ -114,72 +114,43 @@ export class VtcService {
 
     }
 
-    //Get Players that already checkin an by game.
-    getGamePlayers(locationId):Player[]{
-        //need to handle credital that expired
-        console.log("DynamoDBService getRankPlayers(): reading from DDB with creds - " + AWS.config.credentials);
-        var params = {
-            TableName: environment.vbcTableName,
-            IndexName: "createdByIndex",
-            KeyConditionExpression: "createdBy = :createdBy",
-            FilterExpression: "locationId = :locationId",
-            ExpressionAttributeValues: {
-                ":createdBy": this.createdBy,
-                ":locationId": locationId  //TODO - add checkin filter
-            }
-        };
-        var pool1 = [];
-        var pool2 =[];
-        var pool3 = [];
-        var result = [];
-        var docClient = new AWS.DynamoDB.DocumentClient();
-        docClient.query(params, onQuery);
+    //Get Players that already checkin an by event and groupname.
+    getGamePlayers(locationId, groupName, accessToken:string){
 
-        function onQuery(err, data) {
-            if (err) { //todo handle login expired
-                console.error("DynamoDBService: Unable to query the table. Error JSON:", JSON.stringify(err, null, 2));
-            } else {
-                // all the players
-                console.log("DynamoDBService : Query succeeded.");
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
+          'Authorization': accessToken,
+          'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT'
+        })
+      };
 
-                data.Items.forEach(function(item) {
+      console.log("Event id:" + locationId);
+      return this.http.get(this.serverUrl+"/player/getAssignedGamesByGroup/"+locationId
+          +"?eventId="+locationId+"&group="+groupName, httpOptions);
 
-                  console.log("DynamoDBService: item" + JSON.stringify(item));
-                  if (item.checkin == "true") {
-                    let aPlayer = new Player(item.PlayerId,item.name, eval(item.checkin),item.group,
-                        item.createdBy, item.locationId  //TODO - should be eventName
-                      );
+      /*
+        pool1.sort((p1,p2) => {
+          return p1.team - p2.team;
+        });
+        //need todo better same sort function
+        pool2.sort((p1,p2) => {
+        return p1.team - p2.team;
+        });
 
-                    console.log("DynamoDBService: add Player" + JSON.stringify(aPlayer));
-                    if (aPlayer.group == "Gold")
-                      pool1.push(aPlayer);
-                    else if (aPlayer.group == "Silver")
-                      pool2.push(aPlayer);
-                    else
-                      pool3.push(aPlayer);
-                  } else {
-                    console.log("DynamoDBService - Filter out player not checkin");
-                  }
-                });
+        pool3.sort((p1,p2)=> {
+          return p1.team - p2.team;
+        });
 
-                pool1.sort((p1,p2) => {
-                  return p1.team - p2.team;
-                });
-                //need todo better same sort function
-                pool2.sort((p1,p2) => {
-                return p1.team - p2.team;
-                });
+        returnResult.push(pool1);
+        returnResult.push(pool2);
+        returnResult.push(pool3);
 
-                pool3.sort((p1,p2)=> {
-                  return p1.team - p2.team;
-                });
-            }
-        }
-
-        result.push(pool1);
-        result.push(pool2);
-        result.push(pool3);
-        return result;
+        return returnResult;
+  
+      */
+  
     }
 
 
@@ -270,37 +241,12 @@ export class VtcService {
           'Content-Type':  'application/json',
           //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
           'Authorization': accessToken
-        })
+        }),responseType: 'text' as 'json' 
       };
         console.log("Writing to restful server: player -" + JSON.stringify(player));
         
         return this.http.post(this.serverUrl+"/player", player, httpOptions);
 
-        /*
-        var DDB = new AWS.DynamoDB({
-            params: {TableName: environment.vbcTableName}
-        });
-
-        // Write the item to the table
-        var itemParams =
-            {
-                Item: {
-                    PlayerId: {S: player.playerId},
-                    name: {S: player.name},
-                    group: {S: player.group},
-                    checkin: {S: player.checkin.toString()},
-                    createdBy: {S: player.createdBy},
-                    locationId: {S: player.eventName},
-                }
-            };
-
-        console.log("DynamoDBService: before writting entry: " + JSON.stringify(itemParams));
-
-        DDB.putItem(itemParams, function (result) {
-          if (result != null)
-            console.log("DynamoDBService ERROR: wrote entry: " + JSON.stringify(result));
-        });
-        */
     }
 
     saveAndGenerate(players: Player[]): string {
@@ -410,8 +356,5 @@ export class VtcService {
         players[m] = players[i];
         players[i] = t;
       }
-
     }
-
-
 }
