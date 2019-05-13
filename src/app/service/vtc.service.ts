@@ -15,11 +15,6 @@ declare var AWSCognito: any;
 @Injectable({ providedIn: 'root' })
 export class VtcService {
 
-  createdBy = "thyngontran@gmail.com";  //TODO remove
-  serverUrl = "https://8a5qna5p87.execute-api.us-east-1.amazonaws.com/latest";  //aws hosted in lambda
-  //serverUrl = "http://localhost:3333";  //local run in node express
-
-
 
   locationId;
 
@@ -110,7 +105,7 @@ export class VtcService {
       };
 
       console.log("Event id:" + locationId);
-      return this.http.get(this.serverUrl+"/player/allByEvent/"+locationId, httpOptions);
+      return this.http.get(environment.serverUrl+"/player/allByEvent/"+locationId, httpOptions);
 
     }
 
@@ -127,33 +122,12 @@ export class VtcService {
       };
 
       console.log("Event id:" + locationId);
-      return this.http.get(this.serverUrl+"/player/getAssignedGamesByGroup/"+locationId
-          +"?eventId="+locationId+"&group="+groupName, httpOptions);
-
-      /*
-        pool1.sort((p1,p2) => {
-          return p1.team - p2.team;
-        });
-        //need todo better same sort function
-        pool2.sort((p1,p2) => {
-        return p1.team - p2.team;
-        });
-
-        pool3.sort((p1,p2)=> {
-          return p1.team - p2.team;
-        });
-
-        returnResult.push(pool1);
-        returnResult.push(pool2);
-        returnResult.push(pool3);
-
-        return returnResult;
-  
-      */
-  
+      return this.http.get(environment.serverUrl+"/player/getAssignedGamesByGroup/"+locationId
+          +"?eventId="+locationId+"&group="+groupName, httpOptions);  
     }
 
 
+/*
     getRankPlayers(locationId):Player[]{
         //need to handle credital that expired
         console.log("DynamoDBService getRankPlayers(): reading from DDB with creds - " + AWS.config.credentials);
@@ -163,7 +137,7 @@ export class VtcService {
             KeyConditionExpression: "createdBy = :createdBy",
             FilterExpression: "locationId = :locationId",
             ExpressionAttributeValues: {
-                ":createdBy": this.createdBy,
+                ":createdBy": "thyngontran@gmail.com",
                 ":locationId": locationId
             }
         };
@@ -217,20 +191,7 @@ export class VtcService {
         result.push(pool3);
         return result;
     }
-
-
-    writePlayer(player: Player) {
-        try {
-            let date = new Date().toString();
-            console.log("DynamoDBService: Writing log entry. Type:" + player + " ID: " + AWS.config.credentials.params.IdentityId + " Date: " + date);
-            //this.write(player,"DUMMY_ACCESS_TOKEN");  TODO not sure if anyone use this method.
-        } catch (exc) {
-            console.log("DynamoDBService: Couldn't write to DDB");
-        }
-
-    }
-
-
+*/
     /** /
      *Use post to the CRUD player restful service
      */
@@ -245,7 +206,7 @@ export class VtcService {
       };
         console.log("Writing to restful server: player -" + JSON.stringify(player));
         
-        return this.http.post(this.serverUrl+"/player", player, httpOptions);
+        return this.http.post(environment.serverUrl+"/player", player, httpOptions);
 
     }
 
@@ -267,9 +228,9 @@ export class VtcService {
 
       for (let player of players) {
 
-          if (player.group =="Gold" && player.checkin){
+          if (player.groupName =="Gold" && player.checkin){
               generatedPool1.push(player);
-          } else if (player.group =="Silver" && player.checkin) {
+          } else if (player.groupName =="Silver" && player.checkin) {
               generatedPool2.push(player);
           } else { //unknown
               if(player.checkin){

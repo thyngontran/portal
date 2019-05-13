@@ -6,38 +6,33 @@ import { Player, PLAYERS } from '../vtcdomain';
 import { VtcService } from '../../service/vtc.service';
 import { Observable, of } from 'rxjs';
 import {setting} from "../setting";
+import {VtcComponent} from "../vtc.component";
+
 
 @Component({
   selector: 'app-games',
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.css']
 })
-export class GamesComponent implements OnInit, OnDestroy, LoggedInCallback{
+export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
 
-  //jwtokens
-  accessToken: string;
-  idToken: string;
 
   generatedPool1 = [];
   generatedPool2 = [];
   generatedPool3 = [];
   allPlayers = [];
-  pools = [];
-  sites: string[];
-  selectedSite: string;
 
   trackTeamWon;
   trackTeamLost;
   trackPointDif;
 
-  constructor(public router: Router, public userService: UserLoginService, public userParams: UserParametersService,private vtcService: VtcService,public cognitoUtil: CognitoUtil) {
-    this.userService.isAuthenticated(this);
-    this.pools = setting.groups;
-    this.sites = setting.sites;
-    this.selectedSite = "2018Fall";
+  constructor(public router: Router, public userService: UserLoginService, private vtcService: VtcService,public cognitoUtil: CognitoUtil) {
+    super (router,userService,cognitoUtil);
+
   }
 
   ngOnInit() {
+
     this.vtcService.getGamePlayers(this.selectedSite,"Gold",this.accessToken)
     .subscribe(response => {
       var result = response["Items"];
@@ -46,15 +41,14 @@ export class GamesComponent implements OnInit, OnDestroy, LoggedInCallback{
 
       result.forEach(function(item) {
         console.log("RestFul: item" + JSON.stringify(item));
-        returnPlayers.push(item);
+        if (item.checkin) //only add checkin players
+          returnPlayers.push(item);
       });
 
       returnPlayers.sort((p1,p2) => {
         return p1.team - p2.team;
       });
 
-
-     this.allPlayers[0] = returnPlayers;
      this.generatedPool1 = returnPlayers;
     });
 
@@ -67,15 +61,15 @@ export class GamesComponent implements OnInit, OnDestroy, LoggedInCallback{
 
       result.forEach(function(item) {
         console.log("RestFul: item" + JSON.stringify(item));
-        returnPlayers.push(item);
+        if (item.checkin) //only add checkin players
+          returnPlayers.push(item);
       });
 
       returnPlayers.sort((p1,p2) => {
         return p1.team - p2.team;
       });
 
-     this.allPlayers[1] = returnPlayers;
-     this.generatedPool2 = returnPlayers;
+      this.generatedPool2 = returnPlayers;
     });
 
 
@@ -87,15 +81,15 @@ export class GamesComponent implements OnInit, OnDestroy, LoggedInCallback{
 
       result.forEach(function(item) {
         console.log("RestFul: item" + JSON.stringify(item));
-        returnPlayers.push(item);
+        if (item.checkin) //only add checkin players
+          returnPlayers.push(item);
       });
 
       returnPlayers.sort((p1,p2) => {
         return p1.team - p2.team;
       });
 
-     this.allPlayers[2] = returnPlayers;
-     this.generatedPool3 = returnPlayers;
+      this.generatedPool3 = returnPlayers;
     });
 
   }
@@ -113,37 +107,44 @@ export class GamesComponent implements OnInit, OnDestroy, LoggedInCallback{
     //this.saveAllPlayers();
   }
 
-  isLoggedIn(message: string, isLoggedIn: boolean) {
-
-    if (!isLoggedIn) {
-      this.router.navigate(['/home/login']);
-    } else {
-      this.cognitoUtil.getAccessToken(new AccessTokenCallback(this));
-      this.cognitoUtil.getIdToken(new IdTokenCallback(this));
-    }
-  }
-
-
-
 
   trackScore():void {
 
+    //reset allPlayers array
+    this.allPlayers = this.generatedPool1;
+    this.allPlayers.concat(this.generatedPool2);
+    this.allPlayers.concat(this.generatedPool3);
+
     console.log ("TrackSCORE:" + this.allPlayers);
+    console.log ("TrackSCORE generatePool1:" + this.generatedPool1);
+
+
 
     for (let player of this.allPlayers) {
+      console.log ("TrackSCORE:"+player.gameWon+"totalPoints"+player.totalPoints+"pointDif"+this.trackPointDif);
+
+      player.gameWon = (player.gameWon==null)? 0 : player.gameWon;
+      player.gameLost = (player.gameLost==null)? 0 : player.gameLost;
+      player.totalPoints = (player.totalPoints==null)? 0 : player.totalPoints;
+      player.gamePlayed = (player.gamePlayed==null)? 0 : player.gamePlayed;
 
       //record all player on winner team
       if (player.checkin && player.team == this.trackTeamWon) {
 
         console.log ("Track gamewon:"+player.gameWon+"totalPoints"+player.totalPoints+"pointDif"+this.trackPointDif);
-
         player.gameWon++;
+        
         player.totalPoints = Number(player.totalPoints) + Number(this.trackPointDif);
         //increase #gameplayed
         player.gamePlayed++;
 
         //write to database
-        this.vtcService.write(player, this.accessToken); //TODO
+        this.vtcService.write(player, this.accessToken)    
+        .subscribe (       
+          success => console.log("Write score Successful!"),
+          error => {alert(JSON.stringify(error));}
+        );
+    
 
       }
 
@@ -156,7 +157,12 @@ export class GamesComponent implements OnInit, OnDestroy, LoggedInCallback{
         player.gamePlayed++;
 
         //write to database
-        this.vtcService.write(player, this.accessToken); //TODO
+        this.vtcService.write(player, this.accessToken)        
+        .subscribe (       
+          success => console.log("Write score Successful!"),
+          error => {alert(JSON.stringify(error));}
+        );
+
 
       }
     }
@@ -167,31 +173,3 @@ export class GamesComponent implements OnInit, OnDestroy, LoggedInCallback{
 
 }
 
-
-export class AccessTokenCallback implements Callback {
-  constructor(public jwt: GamesComponent) {
-
-  }
-
-  callback() {
-
-  }
-
-  callbackWithParam(result) {
-      this.jwt.accessToken = result;
-  }
-}
-
-export class IdTokenCallback implements Callback {
-  constructor(public jwt: GamesComponent) {
-
-  }
-
-  callback() {
-
-  }
-
-  callbackWithParam(result) {
-      this.jwt.idToken = result;
-  }
-}
