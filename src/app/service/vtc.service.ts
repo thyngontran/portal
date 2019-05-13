@@ -100,7 +100,8 @@ export class VtcService {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
           //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
-          'Authorization': accessToken
+          'Authorization': accessToken, 
+          'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT'
         })
       };
 

@@ -125,7 +125,7 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
     var statusText = "";
     statusText = this.vtcService.generate(this.players);
     this.saveAllPlayers();
-
+    this.router.navigate(['/vtc/games']);
     alert(statusText);
 
   }
@@ -134,7 +134,7 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
 
     //createdBy will be overwrite on server side by read from accessToken
     let newPlayer = new Player(""+new Date().getTime(),this.newPlayerName,this.newCheckin,this.newGroup,
-    "thyngontran@gmail.com",this.selectedSite);
+    "thyngontran@gmail.com",this.selectedSite, new Date().toUTCString());
 
     this.players.push(newPlayer);
 
