@@ -31,10 +31,6 @@
     <th width="30%">Player Name</th>
     <th (click)="checkInAll()">Checkin</th>
     <th>Pool</th>
-    <th>GP</th>
-    <th>GW</th>
-    <th>GL</th>
-    <th>Points</th>
   </tr>
   <tr *ngFor="let player of players | filter : searchKeyword; index as i">
     <td>{{i+1}}</td>
@@ -47,10 +43,6 @@
         <option *ngFor="let group of groups" [value]="group">{{group}}</option>
       </select>
     </td>
-    <td>{{player.gamePlayed}}</td>
-    <td>{{player.gameWon}}</td>
-    <td>{{player.gameLost}}</td>
-    <td>{{player.totalPoints}}</td>
   </tr>
 
 </table>

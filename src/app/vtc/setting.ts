@@ -8,8 +8,8 @@ const pools = ['Gold',
              ];
 
 
-const sites = ['2018 Summer',
-              '2018 Fall'
+const sites = ['2018Summer',
+              '2018Fall'
               ];
 
 export const setting = {
