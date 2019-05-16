@@ -16,7 +16,7 @@ export const setting = {
     pool1TeamSize: 2,
     pool2TeamSize: 2,
     teamSize: 3,
-    groups: pools,
+    pools: pools,
     sites: sites,
 
 };

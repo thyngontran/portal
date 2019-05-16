@@ -19,9 +19,8 @@ export const environment = {
 
     ddbTableName: 'LoginTrailPortal',
 
-    vbcTableName: 'CyburiPlayers',
-
-    playerUrl: 'http://localhost:3333/player'
+    serverUrl: "https://8a5qna5p87.execute-api.us-east-1.amazonaws.com/latest", //aws hosted in lambda
+    //serverUrl: 'http://localhost:3333', //local node express service
 
 };
 

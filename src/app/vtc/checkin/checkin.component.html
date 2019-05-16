@@ -14,7 +14,7 @@
 <div class="form-group">
       <label for="group">Pool:</label>
       <select class="form-control" id="group" required [(ngModel)]="newGroup" name="newGroup">
-        <option *ngFor="let group of groups" [value]="group">{{group}}</option>
+        <option *ngFor="let group of pools" [value]="group">{{group}}</option>
       </select>
   <div class="checkbox">
     <label>
@@ -30,7 +30,8 @@
     <th><input [(ngModel)]="searchKeyword" placeholder="Search Word" size="10" class="form-control"></th>
     <th width="30%">Player Name</th>
     <th (click)="checkInAll()">Checkin</th>
-    <th>Pool</th>
+    <th>Skill Level</th>
+    <th>Last Updated</th>
   </tr>
   <tr *ngFor="let player of players | filter : searchKeyword; index as i">
     <td>{{i+1}}</td>
@@ -39,10 +40,11 @@
     <td><input type="checkbox" [(ngModel)]="player.checkin" placeholder="Checkin">
     </td>
     <td>
-      <select class="form-control" required maxlength="10" [(ngModel)]="player.group" name="pool">
-        <option *ngFor="let group of groups" [value]="group">{{group}}</option>
+      <select class="form-control" required maxlength="10" [(ngModel)]="player.groupName" name="pool">
+        <option *ngFor="let group of pools" [value]="group">{{group}}</option>
       </select>
     </td>
+    <td>{{player.lastUpdated}}</td>
   </tr>
 
 </table>
