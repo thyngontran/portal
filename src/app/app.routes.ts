@@ -18,6 +18,14 @@ import { GamesComponent } from './vtc/games/games.component';
 import { RankComponent } from './vtc/rank/rank.component';
 import { VtcComponent } from './vtc/vtc.component';
 
+import { EventCheckinComponent} from "./event/checkin/checkin.component";
+import { EventComponent } from './event/event.component';
+import { EventmainComponent } from './event/eventmain/eventmain.component';
+import { BjerringComponent } from './event/bjerring/bjerring.component';
+import { TeamComponent } from './event/team/team.component';
+import { ScoreboardComponent } from '././event/scoreboard/scoreboard.component';
+
+
 const homeRoutes: Routes = [
     {
         path: '',
@@ -60,7 +68,7 @@ const secureHomeRoutes: Routes = [
 const vtcRoutes: Routes = [
   {
       path: '',
-      redirectTo: '/vtc',
+      redirectTo: '/vtc/welcome',
       pathMatch: 'full'
   },
   {
@@ -74,6 +82,25 @@ const vtcRoutes: Routes = [
   }
 ];
 
+const eventRoutes: Routes = [
+    {
+        path: '',
+        redirectTo: '/event/checkin',
+        pathMatch: 'full'
+    },
+    {
+        path: 'event', component: EventComponent, children: [
+        {path: 'main', component: EventmainComponent},
+        {path: 'checkin', component: EventCheckinComponent},
+        {path: 'bjerring', component: BjerringComponent},
+        {path: 'team', component: TeamComponent},
+        {path: 'scoreboard', component: ScoreboardComponent},
+      ]
+  
+    }
+  ];
+  
+
 const routes: Routes = [
     {
         path: '',
@@ -81,6 +108,7 @@ const routes: Routes = [
             ...homeRoutes,
             ...secureHomeRoutes,
             ...vtcRoutes,
+            ...eventRoutes,
             {
                 path: '',
                 component: HomeComponent

@@ -17,21 +17,18 @@ export class VtcService {
 
 
   locationId;
-
+  idToken;
   generatedPool1;
   generatedPool2;
   generatedPool3;
 
   allPlayers;
 
-
-
-
   constructor(
     private http: HttpClient,public router: Router) { }
 
     getAWS() {
-        return AWS;
+      return AWS;
     }
 
 
@@ -73,7 +70,7 @@ export class VtcService {
        return ax.length - bx.length;
     }
 
-    // compare two players; short by gamePlayed adn then gameWon, and then totalPoints
+    // compare two players; sort by gamePlayed and then gameWon, and then totalPoints
     public static rankCompare(a, b) {
         if (a.gamePlayed > b.gamePlayed) {
             return -11;
@@ -100,7 +97,9 @@ export class VtcService {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
           //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
-          'Authorization': accessToken, 
+          'Authorization': this.idToken, 
+          'type': 'TOKEN', 
+          'authorizationToken': accessToken, 
           'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT'
         })
       };
@@ -117,7 +116,9 @@ export class VtcService {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
           //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
-          'Authorization': accessToken,
+          'Authorization': this.idToken,
+          'type': 'TOKEN', 
+          'authorizationToken': accessToken,
           'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT'
         })
       };
@@ -127,72 +128,6 @@ export class VtcService {
           +"?eventId="+locationId+"&group="+groupName, httpOptions);  
     }
 
-
-/*
-    getRankPlayers(locationId):Player[]{
-        //need to handle credital that expired
-        console.log("DynamoDBService getRankPlayers(): reading from DDB with creds - " + AWS.config.credentials);
-        var params = {
-            TableName: environment.vbcTableName,
-            IndexName: "createdByIndex",
-            KeyConditionExpression: "createdBy = :createdBy",
-            FilterExpression: "locationId = :locationId",
-            ExpressionAttributeValues: {
-                ":createdBy": "thyngontran@gmail.com",
-                ":locationId": locationId
-            }
-        };
-        var pool1 = [];
-        var pool2 =[];
-        var pool3 = [];
-        var result = [];
-        var docClient = new AWS.DynamoDB.DocumentClient();
-        docClient.query(params, onQuery);
-
-        function onQuery(err, data) {
-            if (err) { //todo handle login expired
-                console.error("DynamoDBService: Unable to query the table. Error JSON:", JSON.stringify(err, null, 2));
-            } else {
-                // all the players
-                console.log("DynamoDBService : Query succeeded.");
-
-                data.Items.forEach(function(item) {
-
-                  console.log("DynamoDBService: item" + JSON.stringify(item));
-                  let aPlayer = new Player(item.PlayerId,item.name, eval(item.checkin),item.group,
-                      item.createdBy, item.locationId
-                    );
-
-                  console.log("DynamoDBService: Player" + JSON.stringify(aPlayer));
-                  if (aPlayer.group == "Gold")
-                    pool1.push(aPlayer);
-                  else if (aPlayer.group == "Silver")
-                    pool2.push(aPlayer);
-                  else
-                    pool3.push(aPlayer);
-
-                });
-
-                pool1.sort((p1,p2) => {
-                  return VtcService.rankCompare(p1, p2);
-                });
-                //need todo better same sort function
-                pool2.sort((p1,p2) => {
-                  return VtcService.rankCompare(p1, p2);
-                });
-
-                pool3.sort((p1,p2)=> {
-                  return VtcService.rankCompare(p1, p2);
-                });
-            }
-        }
-
-        result.push(pool1);
-        result.push(pool2);
-        result.push(pool3);
-        return result;
-    }
-*/
     /** /
      *Use post to the CRUD player restful service
      */
@@ -202,12 +137,14 @@ export class VtcService {
         headers: new HttpHeaders({
           'Content-Type':  'application/json',
           //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
-          'Authorization': accessToken
+          'Authorization': this.idToken,
+          'type': 'TOKEN', 
+          'authorizationToken': accessToken
         }),responseType: 'text' as 'json' 
       };
-        console.log("Writing to restful server: player -" + JSON.stringify(player));
+      console.log("Writing to restful server: player -" + JSON.stringify(player));
         
-        return this.http.post(environment.serverUrl+"/player", player, httpOptions);
+      return this.http.post(environment.serverUrl+"/player", player, httpOptions);
 
     }
 
@@ -238,7 +175,6 @@ export class VtcService {
                  generatedPool3.push(player);
               }
           }
-
         }
 
         //randomize pool1
@@ -290,18 +226,15 @@ export class VtcService {
                 pool3TeamCount = pool3TeamCountOrg
             }
             allTeamCount = (allTeamCount > pool3TeamCount)?allTeamCount:pool3TeamCount;
-
         }
 
         //this.saveAll(players);
-
         this.generatedPool1 = generatedPool1;
         this.generatedPool2 = generatedPool2;
         this.generatedPool3 = generatedPool3;
 
         statusText = "Need " + Math.round(allTeamCount/2) + " Nets Totals";
         return statusText;
-
     }
 
     // -> Fisher–Yates shuffle algorithm

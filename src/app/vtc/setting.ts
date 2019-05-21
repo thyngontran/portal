@@ -7,6 +7,10 @@ const pools = ['Gold',
               'New'
              ];
 
+const tourneyType = ['Bjerring',
+             'Team',
+             'Other'
+            ];
 
 const sites = ['2018Summer',
               '2018Fall'

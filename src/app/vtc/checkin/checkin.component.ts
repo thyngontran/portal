@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import {Router} from "@angular/router";
 
-import {LoggedInCallback, UserLoginService, UserParametersService, CognitoUtil, Callback} from "../../service/cognito.service";
+import {UserLoginService, UserParametersService, CognitoUtil} from "../../service/cognito.service";
 
 import { Player, PLAYERS } from '../vtcdomain';
 import { VtcService } from '../../service/vtc.service';
@@ -94,11 +94,11 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
       success => console.log("Added Successful!"),
       error => {alert(JSON.stringify(error));}
     );
-
   }
 
   getPlayers(): void {
 
+    this.vtcService.idToken = this.idToken;
     this.vtcService.getAllPlayers(this.selectedSite,this.accessToken)
     .subscribe(response => {
       var result = response["Items"];
@@ -147,30 +147,3 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
 
 }
 
-export class AccessTokenCallback implements Callback {
-  constructor(public jwt: CheckinComponent) {
-
-  }
-
-  callback() {
-
-  }
-
-  callbackWithParam(result) {
-      this.jwt.accessToken = result;
-  }
-}
-
-export class IdTokenCallback implements Callback {
-  constructor(public jwt: CheckinComponent) {
-
-  }
-
-  callback() {
-
-  }
-
-  callbackWithParam(result) {
-      this.jwt.idToken = result;
-  }
-}

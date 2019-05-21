@@ -12,8 +12,10 @@
     class="form-control">
     <option *ngFor="let site of sites" [value]="site">{{site}}</option>
   </select> 
-    Randomized team(s):
-</div>
+    
+</div><br>
+<button (click)="letsGo()">RE-ASSIGN</button><br>
+Randomized team(s):
 <hr>
 {{generatedPool1.length}} player(s) in {{pools[0]}} Pool
 <table class="table table-hover table-striped">

@@ -50,6 +50,8 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
       });
 
      this.generatedPool1 = returnPlayers;
+     this.allPlayers = this.generatedPool1;
+
     });
 
 
@@ -70,6 +72,8 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
       });
 
       this.generatedPool2 = returnPlayers;
+      this.allPlayers.concat(this.generatedPool2);
+
     });
 
 
@@ -90,6 +94,7 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
       });
 
       this.generatedPool3 = returnPlayers;
+      this.allPlayers.concat(this.generatedPool3);
     });
 
   }
@@ -107,18 +112,45 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
     //this.saveAllPlayers();
   }
 
+  letsGo(): void {
+
+    this.vtcService.generate(this.allPlayers);
+    this.saveAllPlayers();
+    this.generatedPool1.sort((p1,p2) => {
+      return p1.team - p2.team;
+    });
+
+    this.generatedPool2.sort((p1,p2) => {
+      return p1.team - p2.team;
+    });
+
+    this.generatedPool3.sort((p1,p2) => {
+      return p1.team - p2.team;
+    });
+
+  }
+
+  saveAllPlayers(): void {
+    for (let player of this.allPlayers) {
+      this.savePlayer(player);
+    }
+  }
+
+
+  savePlayer(player: Player): void {
+    console.log("TTTT Save"+ player);
+    this.vtcService.write(player, this.accessToken)
+    .subscribe (       
+      success => console.log("Added Successful!"),
+      error => {alert(JSON.stringify(error));}
+    );
+  }
+
+
 
   trackScore():void {
-
-    //reset allPlayers array
-    this.allPlayers = this.generatedPool1;
-    this.allPlayers.concat(this.generatedPool2);
-    this.allPlayers.concat(this.generatedPool3);
-
     console.log ("TrackSCORE:" + this.allPlayers);
     console.log ("TrackSCORE generatePool1:" + this.generatedPool1);
-
-
 
     for (let player of this.allPlayers) {
       console.log ("TrackSCORE:"+player.gameWon+"totalPoints"+player.totalPoints+"pointDif"+this.trackPointDif);
@@ -144,8 +176,6 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
           success => console.log("Write score Successful!"),
           error => {alert(JSON.stringify(error));}
         );
-    
-
       }
 
       //record all player on losing team
@@ -162,8 +192,6 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
           success => console.log("Write score Successful!"),
           error => {alert(JSON.stringify(error));}
         );
-
-
       }
     }
 

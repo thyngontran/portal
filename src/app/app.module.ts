@@ -28,6 +28,12 @@ import { RankComponent } from './vtc/rank/rank.component';
 import { VtcComponent } from './vtc/vtc.component';
 import { FilterPipe } from './vtc/filter.pipe';
 import { RankPipe } from './vtc/rank.pipe';
+import { EventComponent } from './event/event.component';
+import { BjerringComponent } from './event/bjerring/bjerring.component';
+import { TeamComponent } from './event/team/team.component';
+import { ScoreboardComponent } from './event/scoreboard/scoreboard.component';
+import { EventCheckinComponent } from './event/checkin/checkin.component';
+import { EventmainComponent } from './event/eventmain/eventmain.component';
 
 
 @NgModule({
@@ -53,7 +59,13 @@ import { RankPipe } from './vtc/rank.pipe';
         RankComponent,
         VtcComponent,
         RankPipe,
-        FilterPipe
+        FilterPipe,
+        EventComponent,
+        BjerringComponent,
+        TeamComponent,
+        EventCheckinComponent,
+        ScoreboardComponent,
+        EventmainComponent
     ],
     imports: [
         BrowserModule,
