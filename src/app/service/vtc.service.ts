@@ -3,7 +3,7 @@ import {Router} from "@angular/router";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
 import {environment} from "../../environments/environment";
-import {setting} from "../vtc/setting";
+import {setting} from "../setting";
 
 import { Observable, of } from 'rxjs';
 import { Player} from '../vtc/vtcdomain';
@@ -92,6 +92,44 @@ export class VtcService {
     }
 
 
+    //eventId is used in the locationId
+    getAllEvents(locationId,accessToken:string) {
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
+          'Authorization': this.idToken, 
+          'type': 'TOKEN', 
+          'authorizationToken': accessToken, 
+          'Access-Control-Allow-Methods': 'GET, POST, DELETE, PUT'
+        })
+      };
+
+      console.log("Event id:" + locationId);
+      return this.http.get(environment.serverUrl+"/event/retrieveBy/"+locationId, httpOptions);
+
+    }
+
+    /** /
+     *Use post to the CRUD event restful service
+     */
+    writeEvent(event: any, accessToken:string) {
+
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Content-Type':  'application/json',
+          //'Authorization': 'eyJraWQiOiJkeUxZS3JRT2E2cVRBdUN1QnNZUzJYUXY1Y21peFN4NHNTb3JTTk1FMEJJPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyZTc0MWQ4MC0zODM1LTRmZjAtYTdlYi1iYjgwNmY5NDVmNmEiLCJldmVudF9pZCI6ImYyNWI0NWVlLTY3NjAtMTFlOS1iMmIwLTJkNWZhNTQ0NzMzMyIsInRva2VuX3VzZSI6ImFjY2VzcyIsInNjb3BlIjoiYXdzLmNvZ25pdG8uc2lnbmluLnVzZXIuYWRtaW4iLCJhdXRoX3RpbWUiOjE1NTYyMDAxNjksImlzcyI6Imh0dHBzOlwvXC9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbVwvdXMtZWFzdC0xX0J5cmpOMlQwdCIsImV4cCI6MTU1NzM3NjkyNCwiaWF0IjoxNTU3MzczMzI0LCJqdGkiOiI4NjA5YzEyYS0zZmRlLTRjMjgtOGJiMC02ZmNlYjgzZmY4YjEiLCJjbGllbnRfaWQiOiI2czJ2a29kYjBoYWJhMzBoOHJza3BlNDQ1MiIsInVzZXJuYW1lIjoiMmU3NDFkODAtMzgzNS00ZmYwLWE3ZWItYmI4MDZmOTQ1ZjZhIn0.dVDlkBKAoz1hDF8sfFFTj66b3v-lTZOzwmNdrUZehiYs6-YxF6zGZQu5IpHwq6cmzY8dyhXckSQLJZjFBURluws93sXEe6I6irR2WqzM9KDCLBGGC97RgOuVvCjoKQ-1Xc9rnOYli9BmSfcIvW0Y81ho43GFIdkAlsEXlldI-8ppMX8f96-58r5NT447wrGrOap_Jula003S2mmrBNd1ucPFrdYswqczYQMXEefTTOGm7cySVSg1U8NrqHBZyvrFlgcZh987UuaFsd5FcofYr8mwR1k6OIvuLGOt_zTu29vT5vfVPLMc6ErnzFY9fsjNWdWWlNYjgmEbnOxNu2RsBg'
+          'Authorization': this.idToken,
+          'type': 'TOKEN', 
+          'authorizationToken': accessToken
+        }),responseType: 'text' as 'json' 
+      };
+      console.log("Writing to restful server: event -" + JSON.stringify(event));
+        
+      return this.http.post(environment.serverUrl+"/event", event, httpOptions);
+    }
+
+    //eventId is used in the locationId
     getAllPlayers(locationId,accessToken:string) {
       const httpOptions = {
         headers: new HttpHeaders({
@@ -145,7 +183,6 @@ export class VtcService {
       console.log("Writing to restful server: player -" + JSON.stringify(player));
         
       return this.http.post(environment.serverUrl+"/player", player, httpOptions);
-
     }
 
     saveAndGenerate(players: Player[]): string {

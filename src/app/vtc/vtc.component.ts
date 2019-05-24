@@ -2,7 +2,7 @@ import { Component} from '@angular/core';
 import {Router} from "@angular/router";
 
 import {LoggedInCallback, UserLoginService, CognitoUtil, Callback} from "../service/cognito.service";
-import {setting} from "./setting";
+import {setting} from "../setting";
 
 
 @Component({
@@ -11,7 +11,6 @@ import {setting} from "./setting";
   styleUrls: ['./vtc.component.css']
 })
 export class VtcComponent implements LoggedInCallback {
-
 
   //jwtokens
   accessToken: string;
@@ -37,11 +36,6 @@ export class VtcComponent implements LoggedInCallback {
       this.cognitoUtil.getIdToken(new IdTokenCallback(this));
     }
   }
-
-
-
-
-
 }
 
 export class AccessTokenCallback implements Callback {

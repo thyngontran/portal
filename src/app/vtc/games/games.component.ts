@@ -5,7 +5,7 @@ import {LoggedInCallback, UserLoginService, UserParametersService, CognitoUtil, 
 import { Player, PLAYERS } from '../vtcdomain';
 import { VtcService } from '../../service/vtc.service';
 import { Observable, of } from 'rxjs';
-import {setting} from "../setting";
+import {setting} from "../../setting";
 import {VtcComponent} from "../vtc.component";
 
 

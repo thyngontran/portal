@@ -3,10 +3,8 @@ import {Router} from "@angular/router";
 
 import {UserLoginService, UserParametersService, CognitoUtil} from "../../service/cognito.service";
 
-import { Player, PLAYERS } from '../vtcdomain';
+import { Player } from '../vtcdomain';
 import { VtcService } from '../../service/vtc.service';
-import { Observable, of } from 'rxjs';
-import {setting} from "../setting";
 
 import {VtcComponent} from "../vtc.component";
 
@@ -89,9 +87,10 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
 
   savePlayer(player: Player): void {
     console.log("TTTT Save"+ player);
+    this.vtcService.idToken = this.idToken;
     this.vtcService.write(player, this.accessToken)
     .subscribe (       
-      success => console.log("Added Successful!"),
+      () => console.log("Added Successful!"),
       error => {alert(JSON.stringify(error));}
     );
   }
@@ -138,9 +137,10 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
 
     this.players.push(newPlayer);
 
+    this.vtcService.idToken = this.idToken;
     this.vtcService.write(newPlayer, this.accessToken)
     .subscribe (       
-      success => console.log("Added Successful!"),
+      () => console.log("Added Successful!"),
       error => {alert(JSON.stringify(error));}
     );
   }
