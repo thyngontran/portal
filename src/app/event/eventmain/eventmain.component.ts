@@ -25,9 +25,8 @@ export class EventmainComponent extends EventComponent implements OnInit {
     newEventLocation: string;
     newIsPublic: true;
 
-
-     events;
-     searchKeyword: string;
+    events;  //main events list use as model in the UI page
+    searchKeyword: string;
 
 
   constructor(public router: Router, public userService: UserLoginService, private vtcService: VtcService,public cognitoUtil: CognitoUtil) {
