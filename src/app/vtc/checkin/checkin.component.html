@@ -3,7 +3,6 @@
     class="form-control">
     <option *ngFor="let site of sites" [value]="site">{{site}}</option>
   </select> 
-  <button class="btn btn-primary btn-sm" (click)="letsGo()"> Net Assignment</button>
 </div>
 <br>
 
@@ -34,7 +33,7 @@
     <th>Skill</th>
     <th class="hidden-xs hidden-sm">Last Updated</th>
   </tr>
-  <tr *ngFor="let player of players | filter : searchKeyword; index as i">
+  <tr *ngFor="let player of allPlayers | filter : searchKeyword; index as i">
     <td>{{i+1}}</td>
     <!-- <td><button (click)="savePlayer(player)" class="btn btn-primary btn-sm">Save</button></td> -->
     <td>{{player.name}}</td>
@@ -54,3 +53,4 @@
 <!--{{totalCheckin()}} out of {{players.length}} -->
 <br>
 <hr>
+<button class="btn btn-primary btn-sm" (click)="letsGo()">Lets Go</button>

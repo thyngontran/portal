@@ -16,6 +16,8 @@ declare var AWSCognito: any;
 export class VtcService {
 
 
+  selectedSite: string;
+
   locationId;
   idToken;
   generatedPool1;
@@ -25,7 +27,9 @@ export class VtcService {
   allPlayers;
 
   constructor(
-    private http: HttpClient,public router: Router) { }
+    private http: HttpClient,public router: Router) { 
+      this.selectedSite = "2018Summer";
+    }
 
     getAWS() {
       return AWS;
@@ -219,7 +223,7 @@ export class VtcService {
 
         //assign team number
         var pool1TeamCount = 1;
-        var pool1NumberTeam = Math.round(generatedPool1.length / setting.pool1TeamSize);
+        var pool1NumberTeam = Math.ceil(generatedPool1.length / setting.pool1TeamSize);
         for (let player of generatedPool1) {
             player.team = pool1TeamCount++;
             player.net = Math.round(player.team/2);
@@ -236,10 +240,10 @@ export class VtcService {
         //assign team number
         var pool2TeamCount = allTeamCount+1;
         var pool2TeamCountOrg = pool2TeamCount;
-        var pool2NumberTeam = Math.round(generatedPool2.length / setting.pool2TeamSize);
+        var pool2NumberTeam = Math.ceil(generatedPool2.length / setting.pool2TeamSize);
         for (let player of generatedPool2) {
             player.team = pool2TeamCount++;
-            player.net = Math.round(player.team/2);
+            player.net = Math.ceil(player.team/2);
             if((pool2TeamCount-pool2TeamCountOrg)+1 > pool2NumberTeam){
                 pool2TeamCount = pool2TeamCountOrg;
             }
@@ -252,25 +256,24 @@ export class VtcService {
         //assign team number
         var pool3TeamCount = allTeamCount+1;
         var pool3TeamCountOrg = pool3TeamCount;
-        var pool3NumberTeam = Math.round(generatedPool3.length / setting.teamSize);
+        var pool3NumberTeam = Math.ceil(generatedPool3.length / setting.teamSize);
         for (let player of generatedPool3) {
             console.log("Allteamcount"+allTeamCount);
             console.log("pool3TeamCount before + 1 " + pool3TeamCount);
 
             player.team = pool3TeamCount++;
-            player.net = Math.round(player.team/2);
+            player.net = Math.ceil(player.team/2);
             if((pool3TeamCount-pool3TeamCountOrg)+1 > pool3NumberTeam){
                 pool3TeamCount = pool3TeamCountOrg
             }
             allTeamCount = (allTeamCount > pool3TeamCount)?allTeamCount:pool3TeamCount;
         }
 
-        //this.saveAll(players);
         this.generatedPool1 = generatedPool1;
         this.generatedPool2 = generatedPool2;
         this.generatedPool3 = generatedPool3;
 
-        statusText = "Need " + Math.round(allTeamCount/2) + " Nets Totals";
+        statusText = "Need " + Math.ceil(allTeamCount/2) + " Nets Totals";
         return statusText;
     }
 

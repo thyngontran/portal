@@ -1,23 +1,24 @@
 
 
 <hr>
-
+**Always making sure both team #s and diff points are correctly entered.  There is no system validation of for the assigned games.<br> 
 <input [(ngModel)]="trackTeamWon" placeholder="Team Won" required> vs
 <input [(ngModel)]="trackTeamLost" placeholder="Team Lost" required>
 <input [(ngModel)]="trackPointDif" placeholder="Dif" required>
 <button (click)="trackScore()">RECORD<img src="assets/img/icons/volleyball1.svg"></button>
 <hr>
-<div class="container red">
-  <select required maxlength="10" [(ngModel)]="selectedSite" name="site" (ngModelChange)="onSelectSite()"
-    class="form-control">
-    <option *ngFor="let site of sites" [value]="site">{{site}}</option>
-  </select> 
-    
-</div><br>
-<button (click)="letsGo()">RE-ASSIGN</button><br>
-Randomized team(s):
+<div class="form-inline">
+        Training Event <select required maxlength="10" [(ngModel)]="selectedSite" name="site" (ngModelChange)="onSelectSite()"
+          class="form-control">
+          <option *ngFor="let site of sites" [value]="site">{{site}}</option>
+        </select> 
+</div>
+<br>
+<button class="btn btn-primary btn-sm" (click)="letsGo()">RE-ASSIGN</button><br>
+
 <hr>
-{{generatedPool1.length}} player(s) in {{pools[0]}} Pool
+Randomized players and teams:<br>
+{{generatedPool1.length}} player(s) in {{pools[0]}} Pool - (2 vs 2 format)
 <table class="table table-hover table-striped">
     <tr><th>Team</th><th>Player Name</th><th>Net</th></tr>
     <tr *ngFor="let player of generatedPool1">
@@ -28,7 +29,7 @@ Randomized team(s):
 </table>
 
 <br>
-{{generatedPool2.length}} player(s) in {{pools[1]}} Pool
+{{generatedPool2.length}} player(s) in {{pools[1]}} Pool - (3 vs 3 format)
 <table class="table table-hover table-striped">
     <tr><th>Team</th><th>Player Name</th><th>Net</th></tr>
     <tr *ngFor="let player of generatedPool2">
@@ -39,7 +40,7 @@ Randomized team(s):
 
 </table>
 <br>
-{{generatedPool3.length}} player(s) in {{pools[2]}} Pool
+{{generatedPool3.length}} player(s) in {{pools[2]}} Pool - (4 vs 4 format)
 <table class="table table-hover table-striped">
     <tr><th>Team</th><th>Player Name</th><th>Net</th></tr>
     <tr *ngFor="let player of generatedPool3">

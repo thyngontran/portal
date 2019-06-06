@@ -2,7 +2,9 @@ import { Component} from '@angular/core';
 import {Router} from "@angular/router";
 
 import {LoggedInCallback, UserLoginService, CognitoUtil, Callback} from "../service/cognito.service";
+import { VtcService } from '../service/vtc.service';
 import {setting} from "../setting";
+import { Player } from './vtcdomain';
 
 
 @Component({
@@ -16,15 +18,16 @@ export class VtcComponent implements LoggedInCallback {
   accessToken: string;
   idToken: string;
 
+  allPlayers = [];
+
   public pools;
   sites: string[];
-  selectedSite: string;
 
-  constructor(public router: Router, public userService: UserLoginService, public cognitoUtil: CognitoUtil) {
+  constructor(public router: Router, public userService: UserLoginService, public vtcService: VtcService, public cognitoUtil: CognitoUtil, ) {
     this.userService.isAuthenticated(this);
     this.pools = setting.pools;
     this.sites = setting.sites;
-    this.selectedSite = "2018Fall";
+    //this.selectedSite = "2018Fall";
   }
 
   isLoggedIn(message: string, isLoggedIn: boolean) {
@@ -36,6 +39,30 @@ export class VtcComponent implements LoggedInCallback {
       this.cognitoUtil.getIdToken(new IdTokenCallback(this));
     }
   }
+
+  get selectedSite():string { 
+    return this.vtcService.selectedSite; 
+  } 
+  set selectedSite(value: string) { 
+    this.vtcService.selectedSite = value; 
+  } 
+
+  saveAllPlayers(): void {
+    for (let player of this.allPlayers) {
+      this.savePlayer(player);
+    }
+  }
+
+  savePlayer(player: Player): void {
+    console.log("TTTT Save"+ player);
+    this.vtcService.idToken = this.idToken;
+    this.vtcService.write(player, this.accessToken)
+    .subscribe (       
+      () => console.log("Added Successful!"),
+      error => {alert(JSON.stringify(error));}
+    );
+  }
+
 }
 
 export class AccessTokenCallback implements Callback {

@@ -24,12 +24,16 @@ const sites = ['2018Summer',
               '2019Winter',
               '2019Spring',
               '2019Summer',
+              '2020Fall',
+              '2020Winter',
+              '2020Spring',
+              '2020Summer',
             ];
 
 export const setting = {
     pool1TeamSize: 2,
-    pool2TeamSize: 2,
-    teamSize: 3,
+    pool2TeamSize: 3,
+    teamSize: 4,
     pools: pools,
     sites: sites,
     eventTypes: eventTypes,

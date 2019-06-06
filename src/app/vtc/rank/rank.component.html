@@ -1,3 +1,16 @@
+<hr>
+<button (click)="resetAllScores()">RESET ALL SCORES</button>
+<hr>
+
+<div class="form-inline">
+    Training Event <select required maxlength="10" [(ngModel)]="selectedSite" name="site" (ngModelChange)="onSelectSite()"
+      class="form-control">
+      <option *ngFor="let site of sites" [value]="site">{{site}}</option>
+    </select> 
+</div>
+<br>
+
+
 <div>
 Have games teach the games.  The best way to learn volleyball skills is playing 2vs2 or 3vs3.  Randomized matches are computerized each time.  Rank is based on #game played, #game won, total points by using a method of the mathematician Bjerring; and more detailed whitepaper can be found <a href="/resource/LinearRankingTournament.pdf">here</a>.<br>
 <small><b><i>**GP-Game Played, GW-Game Won, GL-Game Lost, Points-Total Points</i></b></small>

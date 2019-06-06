@@ -26,8 +26,8 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
   trackTeamLost;
   trackPointDif;
 
-  constructor(public router: Router, public userService: UserLoginService, private vtcService: VtcService,public cognitoUtil: CognitoUtil) {
-    super (router,userService,cognitoUtil);
+  constructor(public router: Router, public userService: UserLoginService, public vtcService: VtcService,public cognitoUtil: CognitoUtil) {
+    super (router,userService,vtcService,cognitoUtil);
 
   }
 
@@ -72,7 +72,7 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
       });
 
       this.generatedPool2 = returnPlayers;
-      this.allPlayers.concat(this.generatedPool2);
+      this.allPlayers = this.allPlayers.concat(this.generatedPool2);
 
     });
 
@@ -94,7 +94,7 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
       });
 
       this.generatedPool3 = returnPlayers;
-      this.allPlayers.concat(this.generatedPool3);
+      this.allPlayers = this.allPlayers.concat(this.generatedPool3);
     });
 
   }
@@ -114,19 +114,24 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
 
   letsGo(): void {
 
-    this.vtcService.generate(this.allPlayers);
-    this.saveAllPlayers();
-    this.generatedPool1.sort((p1,p2) => {
-      return p1.team - p2.team;
-    });
-
-    this.generatedPool2.sort((p1,p2) => {
-      return p1.team - p2.team;
-    });
-
-    this.generatedPool3.sort((p1,p2) => {
-      return p1.team - p2.team;
-    });
+    var r = confirm("All current games will be reshuffle and will affect scores being recorded. Make sure to finish all ongoing games and record all scores before proceed.  Are you sure you want to continue? ");
+    if (r == true) {
+      //user chooses to continue 
+      this.vtcService.generate(this.allPlayers);
+      this.saveAllPlayers();
+      this.generatedPool1.sort((p1,p2) => {
+        return p1.team - p2.team;
+      });
+  
+      this.generatedPool2.sort((p1,p2) => {
+        return p1.team - p2.team;
+      });
+  
+      this.generatedPool3.sort((p1,p2) => {
+        return p1.team - p2.team;
+      });
+  
+    } 
 
   }
 

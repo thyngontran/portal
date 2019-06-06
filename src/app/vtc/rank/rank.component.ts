@@ -21,11 +21,10 @@ export class RankComponent extends VtcComponent implements OnInit, OnDestroy{
   group1 =[];
   group2 =[];
   group3 =[];
-  allPlayers = [];
 
 
-  constructor(public router: Router, public userService: UserLoginService, public userParams: UserParametersService,private vtcService: VtcService,public cognitoUtil: CognitoUtil) {
-    super (router,userService,cognitoUtil);
+  constructor(public router: Router, public userService: UserLoginService, public userParams: UserParametersService,public vtcService: VtcService,public cognitoUtil: CognitoUtil) {
+    super (router,userService,vtcService,cognitoUtil);
   }
 
   ngOnInit() {
@@ -47,6 +46,8 @@ export class RankComponent extends VtcComponent implements OnInit, OnDestroy{
       });
 
      this.group1 = returnPlayers;
+     this.allPlayers = this.group1;
+
     });
 
     this.vtcService.getGamePlayers(this.selectedSite,"Silver",this.accessToken)
@@ -66,6 +67,8 @@ export class RankComponent extends VtcComponent implements OnInit, OnDestroy{
       });
 
      this.group2 = returnPlayers;
+     this.allPlayers = this.allPlayers.concat(this.group2);
+
     });
 
     this.vtcService.getGamePlayers(this.selectedSite,"New",this.accessToken)
@@ -85,11 +88,35 @@ export class RankComponent extends VtcComponent implements OnInit, OnDestroy{
       });
 
      this.group3 = returnPlayers;
-    });  }
+     this.allPlayers = this.allPlayers.concat(this.group3);
+    });  
+  }
 
   ngOnDestroy() {
     //console.log("TTTT onDestroy called... saveAllPlayers()");
     //this.saveAllPlayers();
+  }
+
+  // populate - base on selected site
+  onSelectSite(): void {
+      console.log("TTTT selected site:"+ this.selectedSite);
+      this.ngOnInit();
+  }
+
+
+
+  resetAllScores(): void {
+    var r = confirm("Are you sure you want to reset all scores?");
+    if (r == true) {
+      for (let player of this.allPlayers) {
+        //reset each player score
+        player.gameWon = 0;
+        player.gameLost = 0;
+        player.totalPoints = 0;
+        player.gamePlayed = 0;
+        this.savePlayer(player);
+      }
+    }
   }
 
 }

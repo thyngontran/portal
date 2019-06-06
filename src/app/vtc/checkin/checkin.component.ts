@@ -19,7 +19,6 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
 
 
   searchKeyword: string;
-  players: Player[];
 
   //new player panel model
   newPlayerId: string;
@@ -30,8 +29,8 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
   selectAllFlag: boolean;
   selectedPlayer: Player;
 
-  constructor(public router: Router, public userService: UserLoginService, public userParams: UserParametersService,private vtcService: VtcService,public cognitoUtil: CognitoUtil) {
-    super (router,userService,cognitoUtil);
+  constructor(public router: Router, public userService: UserLoginService, public userParams: UserParametersService,public vtcService: VtcService,public cognitoUtil: CognitoUtil) {
+    super (router,userService,vtcService,cognitoUtil);
   }
 
   ngOnInit() {
@@ -66,34 +65,28 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
 
     //toggle selectAllFlag
     this.selectAllFlag = !this.selectAllFlag;
-    for (let player of this.players) {
+    for (let player of this.allPlayers) {
       player.checkin = this.selectAllFlag;
     }
 
   }
 
+  isCheckedIn():boolean {
+    for (let player of this.allPlayers) {
+      if (player.checkin == true) {
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   removePlayer(player: Player): void {
-    this.players = this.players.filter(p => p !== player);
+    this.allPlayers = this.allPlayers.filter(p => p !== player);
     //TODO delete from database
+
   }
 
-  saveAllPlayers(): void {
-    for (let player of this.players) {
-      this.savePlayer(player);
-    }
-  }
-
-
-  savePlayer(player: Player): void {
-    console.log("TTTT Save"+ player);
-    this.vtcService.idToken = this.idToken;
-    this.vtcService.write(player, this.accessToken)
-    .subscribe (       
-      () => console.log("Added Successful!"),
-      error => {alert(JSON.stringify(error));}
-    );
-  }
 
   getPlayers(): void {
 
@@ -113,7 +106,7 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
         return VtcService.naturalCompare(p1.name, p2.name);
       });
 
-      this.players = returnPlayers;
+      this.allPlayers = returnPlayers;
 
     });
 
@@ -122,7 +115,7 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
 
   letsGo(): void {
     var statusText = "";
-    statusText = this.vtcService.generate(this.players);
+    statusText = this.vtcService.generate(this.allPlayers);
     this.saveAllPlayers();
     this.router.navigate(['/vtc/games']);
     alert(statusText);
@@ -135,14 +128,11 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
     let newPlayer = new Player(""+new Date().getTime(),this.newPlayerName,this.newCheckin,this.newGroup,
     "thyngontran@gmail.com",this.selectedSite, new Date().toUTCString());
 
-    this.players.push(newPlayer);
+    //add to the table front-end
+    this.allPlayers.push(newPlayer);
 
-    this.vtcService.idToken = this.idToken;
-    this.vtcService.write(newPlayer, this.accessToken)
-    .subscribe (       
-      () => console.log("Added Successful!"),
-      error => {alert(JSON.stringify(error));}
-    );
+    //save player to backend
+    this.savePlayer(newPlayer);
   }
 
 }
