@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import {Router} from "@angular/router";
 
 import {UserLoginService, UserParametersService, CognitoUtil} from "../../service/cognito.service";
@@ -15,7 +15,7 @@ import {VtcComponent} from "../vtc.component";
   styleUrls: ['./checkin.component.css']
 })
 
-export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy {
+export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
   searchKeyword: string;
@@ -34,6 +34,10 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
   }
 
   ngOnInit() {
+    //this.getPlayers();
+  }
+
+  ngAfterViewInit() {
     this.getPlayers();
   }
 
@@ -71,6 +75,7 @@ export class CheckinComponent extends VtcComponent implements OnInit, OnDestroy 
 
   }
 
+  //TODO toggle Let's GO based on the state of checkin
   isCheckedIn():boolean {
     for (let player of this.allPlayers) {
       if (player.checkin == true) {

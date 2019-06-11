@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit } from '@angular/core';
 import {Router} from "@angular/router";
 
 import {LoggedInCallback, UserLoginService, UserParametersService, CognitoUtil, Callback} from "../../service/cognito.service";
@@ -14,13 +14,12 @@ import {VtcComponent} from "../vtc.component";
   templateUrl: './games.component.html',
   styleUrls: ['./games.component.css']
 })
-export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
+export class GamesComponent extends VtcComponent implements OnInit, OnDestroy, AfterViewInit{
 
 
   generatedPool1 = [];
   generatedPool2 = [];
   generatedPool3 = [];
-  allPlayers = [];
 
   trackTeamWon;
   trackTeamLost;
@@ -32,6 +31,9 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit() {
+  }
+
+  ngAfterViewInit() {
 
     this.vtcService.getGamePlayers(this.selectedSite,"Gold",this.accessToken)
     .subscribe(response => {
@@ -99,10 +101,10 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
 
   }
 
-    // populate - base on selected site
+  // populate - base on selected site
   onSelectSite(): void {
       console.log("TTTT selected site:"+ this.selectedSite);
-      this.ngOnInit();
+      this.ngAfterViewInit();
   }
   
 
@@ -133,22 +135,6 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
   
     } 
 
-  }
-
-  saveAllPlayers(): void {
-    for (let player of this.allPlayers) {
-      this.savePlayer(player);
-    }
-  }
-
-
-  savePlayer(player: Player): void {
-    console.log("TTTT Save"+ player);
-    this.vtcService.write(player, this.accessToken)
-    .subscribe (       
-      success => console.log("Added Successful!"),
-      error => {alert(JSON.stringify(error));}
-    );
   }
 
 
@@ -199,7 +185,6 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy{
         );
       }
     }
-
     alert("Save Score Succeffully...");
 
   }
