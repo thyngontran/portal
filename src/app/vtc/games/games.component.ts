@@ -35,7 +35,7 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy, A
 
   ngAfterViewInit() {
 
-    this.vtcService.getGamePlayers(this.selectedSite,"Gold",this.accessToken)
+    /*this.vtcService.getGamePlayers(this.selectedSite,"Gold",this.accessToken)
     .subscribe(response => {
       var result = response["Items"];
       var returnPlayers = [];
@@ -55,8 +55,17 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy, A
      this.allPlayers = this.generatedPool1;
 
     });
+*/
 
+    this.generatedPool1 = this.vtcService.generatedPool1;
+    
+    this.generatedPool1.sort((p1,p2) => {
+     return p1.team - p2.team;
+    });
+    this.allPlayers = this.generatedPool1;
 
+    
+/*
     this.vtcService.getGamePlayers(this.selectedSite,"Silver",this.accessToken)
     .subscribe(response => {
       var result = response["Items"];
@@ -77,8 +86,17 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy, A
       this.allPlayers = this.allPlayers.concat(this.generatedPool2);
 
     });
+  */
+
+ this.generatedPool2 = this.vtcService.generatedPool2;
+ this.generatedPool2.sort((p1,p2) => {
+  return p1.team - p2.team;
+ });
+
+ this.allPlayers = this.allPlayers.concat(this.generatedPool2);;
 
 
+/*
     this.vtcService.getGamePlayers(this.selectedSite,"New",this.accessToken)
     .subscribe(response => {
       var result = response["Items"];
@@ -98,6 +116,10 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy, A
       this.generatedPool3 = returnPlayers;
       this.allPlayers = this.allPlayers.concat(this.generatedPool3);
     });
+*/
+
+    this.generatedPool3 = this.vtcService.generatedPool3;
+    this.allPlayers = this.allPlayers.concat(this.generatedPool3);;
 
   }
 
@@ -121,6 +143,7 @@ export class GamesComponent extends VtcComponent implements OnInit, OnDestroy, A
       //user chooses to continue 
       this.vtcService.generate(this.allPlayers);
       this.saveAllPlayers();
+
       this.generatedPool1.sort((p1,p2) => {
         return p1.team - p2.team;
       });

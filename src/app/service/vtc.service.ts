@@ -28,7 +28,7 @@ export class VtcService {
 
   constructor(
     private http: HttpClient,public router: Router) { 
-      this.selectedSite = "2018Summer";
+      this.selectedSite = "2019Summer";
     }
 
     getAWS() {

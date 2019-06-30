@@ -8,10 +8,13 @@
 <button (click)="trackScore()">RECORD<img src="assets/img/icons/volleyball1.svg"></button>
 <hr>
 <div class="form-inline">
-        Training Event <select required maxlength="10" [(ngModel)]="selectedSite" name="site" (ngModelChange)="onSelectSite()"
+        Training Event: {{selectedSite}}
+    <!--
+        Training Event <select required maxlength="10" [(ngModel)]="selectedSite" enabled="false" name="site" (ngModelChange)="onSelectSite()"
           class="form-control">
           <option *ngFor="let site of sites" [value]="site">{{site}}</option>
         </select> 
+    -->    
 </div>
 <br>
 <button class="btn btn-primary btn-sm" (click)="letsGo()">RE-ASSIGN</button><br>
